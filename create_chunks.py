@@ -107,11 +107,13 @@ def main():
 
     for chrom in chromosomes_no_chunking_needed:
         # get chrom seq
+        logger.info("-adding unchunked {}".format(chrom))
         chrom_fa = subprocess.check_output(f"samtools faidx {genome_fa} {chrom}", shell=True).decode()
         genome_ofh.write(chrom_fa)
 
 
     # get gtf annotations
+    logger.info("-appending the rest of the unchunked annotations.")
     rest_gtf = annotation_gtf[ annotation_gtf.Chromosome.isin(chromosomes_no_chunking_needed) ]
     chunked_annotation_df = pd.concat([chunked_annotation_df, rest_gtf])
     chunked_genome_annotation_filename = out_prefix + ".chunked.gtf"
