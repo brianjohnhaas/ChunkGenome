@@ -34,6 +34,7 @@ def main():
 
     genome_fa = args.genome_fa
     out_prefix = args.out_prefix
+    gene_annot_gtf_filename = args.gene_annot_gtf
     chunks_file = args.chunks
     write_genome_flag = not args.gtf_only
 
@@ -56,7 +57,7 @@ def main():
     
 
     logger.info("-parsing genome annotations in gtf")
-    annotation_gtf = pd.read_csv("AmexT_v47-AmexG_v6.0-DD.gtf", sep="\t", names=[
+    annotation_gtf = pd.read_csv(gene_annot_gtf_filename, sep="\t", names=[
                         "Chromosome", "Source", "ev_type", "Start", "End", "Score", "Strand", "dot", "info"])
 
     # beginning chunking

@@ -21,16 +21,17 @@ def main():
     parser.add_argument("--genome_fa", type=str, required=True,
                         help="genome in fasta format")
 
-    #parser.add_argument("--out_prefix", "-o", type=str, help="prefix for output files", required=True)
+    parser.add_argument("--out", "-o", dest="out", type=str, help="chunks output filename", required=True)
     parser.add_argument("--max_chunk_size", type=int, help="maximum chunk size", required=True)
     parser.add_argument("--gene_annot_gtf", type=str, help="annotation gtf file", required=True)
     parser.add_argument("--gene_spans", type=str, help="gene spans", required=True)
     parser.add_argument("--N_regions", type=str, help="N regions", required=True)
     
+    
     args = parser.parse_args()
 
     genome_fa = args.genome_fa
-    out_prefix = args.out_prefix
+    output_filename = args.out
     max_chunk_size = args.max_chunk_size
     gene_annot_gtf = args.gene_annot_gtf
     gene_spans_file = args.gene_spans
@@ -110,7 +111,7 @@ def main():
         df_chunks_defined = pd.concat([df_chunks_defined, df_brkpts_nearest])
 
 
-    df_chunks_defined[ ['Chromosome', 'brkpt', 'chunksize_offset_frac'] ].to_csv("chunks.tsv", sep="\t", index=False)
+    df_chunks_defined[ ['Chromosome', 'brkpt', 'chunksize_offset_frac'] ].to_csv(output_filename, sep="\t", index=False)
     
 
 if __name__=='__main__':
