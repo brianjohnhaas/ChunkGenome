@@ -17,8 +17,6 @@ logger = logging.getLogger(__name__)
 
 
 
-write_genome_flag = False
-
 def main():
 
     parser = argparse.ArgumentParser(description="chunk_genome",
@@ -30,12 +28,14 @@ def main():
     parser.add_argument("--out_prefix", "-o", type=str, help="prefix for output files", required=True)
     parser.add_argument("--gene_annot_gtf", type=str, help="annotation gtf file", required=True)
     parser.add_argument("--chunks", type=str, help="chunks tsv file", required=True)
+    parser.add_argument("--gtf_only", action='store_true', default=False, help="only write chunked annotation, not the genome")
     
     args = parser.parse_args()
 
     genome_fa = args.genome_fa
     out_prefix = args.out_prefix
     chunks_file = args.chunks
+    write_genome_flag = not args.gtf_only
 
     
     logger.info("-parsing chromosome lengths")
