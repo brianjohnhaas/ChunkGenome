@@ -8,6 +8,7 @@ import logging
 import argparse
 import math
 import subprocess
+import csv
 
 logging.basicConfig(level=logging.INFO,
                                         format='%(asctime)s : %(levelname)s : %(message)s',
