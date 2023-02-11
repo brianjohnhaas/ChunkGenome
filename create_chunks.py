@@ -14,6 +14,10 @@ logging.basicConfig(level=logging.INFO,
                                         datefmt='%H:%M:%S')
 logger = logging.getLogger(__name__)
 
+
+
+write_genome_flag = False
+
 def main():
 
     parser = argparse.ArgumentParser(description="chunk_genome",
@@ -58,7 +62,8 @@ def main():
     logger.info("Starting to chunk data.\n")
 
     chunked_genome_filename = out_prefix + ".chunked.genome.fa"
-    genome_ofh = open(chunked_genome_filename, "wt")
+    if write_genome_flag:
+        genome_ofh = open(chunked_genome_filename, "wt")
 
     
     
@@ -97,19 +102,21 @@ def main():
                 
             # get genome chunk
 
-            genome_fa_chunk = "\n".join(subprocess.check_output(f"samtools faidx {genome_fa} {chromosome_to_chunk}:{lend_brkpt}-{rend_brkpt}", shell=True).decode().split("\n")[1:])
-            genome_fa_chunk = f">{chrom_partition_name}\n" + genome_fa_chunk
-            genome_ofh.write(genome_fa_chunk)
+            if write_genome_flag:
+                genome_fa_chunk = "\n".join(subprocess.check_output(f"samtools faidx {genome_fa} {chromosome_to_chunk}:{lend_brkpt}-{rend_brkpt}", shell=True).decode().split("\n")[1:])
+                genome_fa_chunk = f">{chrom_partition_name}\n" + genome_fa_chunk
+                genome_ofh.write(genome_fa_chunk)
 
 
     ## get rest of them, no chunking required.
     logger.info("-Done working on chunks.  Now adding in the rest that didn't need chunking....")
 
-    for chrom in chromosomes_no_chunking_needed:
-        # get chrom seq
-        logger.info("-adding unchunked {}".format(chrom))
-        chrom_fa = subprocess.check_output(f"samtools faidx {genome_fa} {chrom}", shell=True).decode()
-        genome_ofh.write(chrom_fa)
+    if write_genome_flag:
+        for chrom in chromosomes_no_chunking_needed:
+            # get chrom seq
+            logger.info("-adding unchunked {}".format(chrom))
+            chrom_fa = subprocess.check_output(f"samtools faidx {genome_fa} {chrom}", shell=True).decode()
+            genome_ofh.write(chrom_fa)
 
 
     # get gtf annotations
@@ -117,7 +124,7 @@ def main():
     rest_gtf = annotation_gtf[ annotation_gtf.Chromosome.isin(chromosomes_no_chunking_needed) ]
     chunked_annotation_df = pd.concat([chunked_annotation_df, rest_gtf])
     chunked_genome_annotation_filename = out_prefix + ".chunked.gtf"
-    chunked_annotation_df.to_csv(chunked_genome_annotation_filename, sep="\t", header=False, index=False)
+    chunked_annotation_df.to_csv(chunked_genome_annotation_filename, sep="\t", header=False, index=False, quoting=csv.QUOTE_NONE, escapechar='\\')
 
     logger.info("Done. See outputs: {}.chunked.*".format(out_prefix))
 
