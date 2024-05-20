@@ -116,7 +116,7 @@ ENSG00000225752.1   chr6   143094034  143099645  -  RP1-45I4.2                  
 ...
 ```    
 
-## Defning the N-regions
+## Defining the N-regions
 
 Sequencing gaps in genome assemblies are usually represented by inserting a series of N characters into the genome at the positions of the sequencing gaps.  We can find these by searching out strings of N's within the genome fasta file.  The following script will do this and report the sequencing regions represented by N characters:
 
