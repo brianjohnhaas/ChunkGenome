@@ -1,4 +1,4 @@
-# Chunking large Axo genome into smaller chunks
+# Chunking a large genome into smaller chunks
 
 Code breaks large chromosomes (and corresponding annotations) into smaller chunks based on:
 
