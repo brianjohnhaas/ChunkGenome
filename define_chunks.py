@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 def main():
 
-    parser = argparse.ArgumentParser(description="chunk_genome",
+    parser = argparse.ArgumentParser(description="define genome chunks",
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     
     parser.add_argument("--genome_fa", type=str, required=True,
